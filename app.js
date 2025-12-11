@@ -2,12 +2,15 @@ const PATH = require('path')
 const express = require('express')
 const APP = express()
 const PORT = 5001
-// respond with "hello world" when a GET request is made to the homepage
-APP.use(express.static(PATH.join(__dirname, 'public')))
 
-APP.use('/Styles', express.static(PATH.join(__dirname, 'Styles')))
+// Serve todos os ficheiros estáticos da pasta public (HTML, CSS, JS, imagens...)
+APP.use(express.static(PATH.join(__dirname, 'public')));
 
+// Rota principal – agora não precisas de sendFile!
+APP.get('/', (req, res) => {
+    res.sendFile(PATH.join(__dirname, 'public', 'login.html'));
+});
 
-APP.listen(PORT, ()=>{
-    console.log("App a decorrer na porta 5001")
-})
+APP.listen(PORT, () => {
+    console.log("App a decorrer na porta 5001");
+});

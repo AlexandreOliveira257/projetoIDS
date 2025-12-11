@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Municipal | Criar Conta</title>
+    
+    <!-- CSS principal + estilos de autenticação -->
+    <link rel="stylesheet" href="styles/register.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <div id="register-container" class="container">
+        <div class="logo">
+            <i class="fas fa-book-open"></i>
+        </div>
+        
+        <h2>Criar nova conta</h2>
+        
+        <form id="register-form">
+            <label for="reg-nome">Nome completo</label>
+            <input type="text" id="reg-nome" placeholder="Ex: Ana Silva" required>
+
+            <label for="reg-email">Email</label>
+            <input type="email" id="reg-email" placeholder="exemplo@dominio.com" required>
+
+            <label for="reg-password">Palavra-passe</label>
+            <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" minlength="6" required>
+
+            <label for="reg-confirm-password">Confirmar palavra-passe</label>
+            <input type="password" id="reg-confirm-password" placeholder="Repete a palavra-passe" required>
+
+            <button type="submit" class="btn primary btn-full">
+                <i class="fas fa-user-plus"></i> Registar
+            </button>
+        </form>
+        
+        <div class="register-link">
+            <p>Já tens conta?</p>
+            <a href="login.html">
+                <i class="fas fa-sign-in-alt"></i> Iniciar sessão
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('reg-password').value;
+            const confirm = document.getElementById('reg-confirm-password').value;
+            
+            if (password !== confirm) {
+                alert('As palavras-passe não coincidem!');
+                return;
+            }
+            
+            // Aqui farias o pedido real ao backend
+            alert('Conta criada com sucesso!\n(redirecionar para login ou dashboard...)');
+            // window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
