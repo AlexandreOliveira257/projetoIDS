@@ -11,6 +11,12 @@ APP.get('/', (req, res) => {
     res.sendFile(PATH.join(__dirname, 'public', 'login.html'));
 });
 
+APP.use((req,res)=>
+{
+    res.sendFile(PATH.join(__dirname, "public","404.html"));
+});
+
+
 APP.listen(PORT, () => {
     console.log("App a decorrer na porta 5001");
 });
