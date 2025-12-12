@@ -5,12 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('main-content');
     const loginForm = document.getElementById('login-form'); // Assumindo que pode ser incluído se necessário
     const registerForm = document.getElementById('register-form'); // Similar
-    const logoutBtn = document.querySelector('.logout-btn');
+    const logoutBtn = document.getElementsByClassName('logout-btn')[0];
     const navButtons = document.querySelectorAll('.nav-btn');
     const bookCards = document.querySelectorAll('.book-card');
     const totalFinesElement = document.querySelector('#main-header .nav-btn:nth-child(4)'); // Ajustado para Multas
     const finesSection = document.querySelector('#fines-section p:nth-child(2)'); // Valor total em Multas
 
+    /*
+logoutBtn = document.getElementsByClassName("logout-btn")[0]
+
+logoutBtn.addEventListener("click", () =>{
+        window.location.href = '/';
+
+})
+    */
     // Estado Simulado do Utilizador
     let isLoggedIn = false;
     let totalFines = 12.50; // Valor inicial
@@ -31,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showSection('loans-section'); // Mostrar empréstimos por padrão
         } else {
             document.title = "Sistema Bibliotecário | Login";
-            authSection.style.display = 'flex';
+            authSection.style.display = 'none';
             mainHeader.style.display = 'none';
             mainContent.style.display = 'none';
         }
@@ -95,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.addEventListener('click', () => {
         isLoggedIn = false;
         updateViewState();
+        console.log("TESTE")
         alert('Sessão terminada.');
     });
 
