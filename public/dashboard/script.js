@@ -11,14 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalFinesElement = document.querySelector('#main-header .nav-btn:nth-child(4)'); // Ajustado para Multas
     const finesSection = document.querySelector('#fines-section p:nth-child(2)'); // Valor total em Multas
 
-    /*
-logoutBtn = document.getElementsByClassName("logout-btn")[0]
-
-logoutBtn.addEventListener("click", () =>{
-        window.location.href = '/';
-
-})
-    */
     // Estado Simulado do Utilizador
     let isLoggedIn = false;
     let totalFines = 12.50; // Valor inicial
@@ -50,7 +42,9 @@ logoutBtn.addEventListener("click", () =>{
      * Mostra uma secção específica e esconde as outras.
      * @param {string} sectionId - O ID da secção a mostrar.
      */
-    function showSection(sectionId) {
+   
+   
+   function showSection(sectionId) {
         document.querySelectorAll('#main-content > section').forEach(section => {
             section.style.display = 'none';
         });
@@ -63,6 +57,7 @@ logoutBtn.addEventListener("click", () =>{
             document.getElementById('search-section').style.gridColumn = '2 / 3';
         }
     }
+    
 
     /**
      * Atualiza o valor das multas no cabeçalho e na secção de multas.
@@ -99,15 +94,8 @@ logoutBtn.addEventListener("click", () =>{
         });
     }
 
-    // 3. Tratamento do Logout
-    logoutBtn.addEventListener('click', () => {
-        isLoggedIn = false;
-        updateViewState();
-        console.log("TESTE")
-        alert('Sessão terminada.');
-    });
 
-    // 4. Tratamento da Navegação
+    // 3. Tratamento da Navegação
     navButtons.forEach(button => {
         button.addEventListener('click', () => {
             const text = button.textContent;
@@ -120,12 +108,12 @@ logoutBtn.addEventListener("click", () =>{
             } else if (text.includes('Multas')) {
                 showSection('fines-section');
             } else if (text.includes('Sair')) {
-                return;
+                return window.location.href = '/';
             }
         });
     });
 
-    // 5. Tratamento de Ações nos Cartões de Livro
+    // 4. Tratamento de Ações nos Cartões de Livro
     bookCards.forEach(card => {
         const title = card.querySelector('h3').textContent;
         const favButton = card.querySelector('.favorite-btn');
@@ -155,7 +143,7 @@ logoutBtn.addEventListener("click", () =>{
         });
     });
 
-    // 6. Tratamento de Devolução e Renovação de Livro
+    // 5. Tratamento de Devolução e Renovação de Livro
     document.querySelectorAll('.loan-item .actions .btn').forEach(btn => {
         const loanItem = btn.closest('.loan-item');
         const title = loanItem.querySelector('h3').textContent;
@@ -189,7 +177,7 @@ logoutBtn.addEventListener("click", () =>{
         }
     });
 
-    // 7. Pagamento de Multas
+    // 6. Pagamento de Multas
     const payFinesBtn = document.querySelector('.pay-btn');
     if (payFinesBtn) {
         payFinesBtn.addEventListener('click', () => {
