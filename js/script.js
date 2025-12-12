@@ -1,19 +1,24 @@
+// scripts/script.js
+// (Atualizado com base no fornecido, adicionando funcionalidades novas como renovar, reservar, ver fila, pagar multas)
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Referências DOM ---
     const authSection = document.getElementById('auth-section');
     const mainHeader = document.getElementById('main-header');
     const mainContent = document.getElementById('main-content');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
+    const loginForm = document.getElementById('login-form'); // Assumindo que pode ser incluído se necessário
+    const registerForm = document.getElementById('register-form'); // Similar
     const logoutBtn = document.querySelector('.logout-btn');
     const navButtons = document.querySelectorAll('.nav-btn');
     const bookCards = document.querySelectorAll('.book-card');
-    const totalFinesElement = document.querySelector('#main-header .nav-btn:nth-child(5)'); // Botão das Multas no Header
-    const finesSection = document.querySelector('.fines-section p:nth-child(2)'); // Parágrafo do valor total na secção de Multas
+    const totalFinesElement = document.querySelector('#main-header .nav-btn:nth-child(4)'); // Ajustado para Multas
+    const finesSection = document.querySelector('#fines-section p:nth-child(2)'); // Valor total em Multas
 
     // Estado Simulado do Utilizador
     let isLoggedIn = false;
-    let totalFines = 12.50; // Valor inicial de multa (exemplo do HTML)
+    let totalFines = 12.50; // Valor inicial
+    let renewals = {}; // Rastrear renovações por livro (ex: { 'O Grande Gatsby': 0 })
+    let reservationQueues = {}; // Filas de reserva por livro (ex: { 'Harry Potter...': 2 })
 
     // --- Funções de Navegação e Estado ---
 
@@ -37,29 +42,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Mostra uma secção específica e esconde as outras (simulando navegação).
+     * Mostra uma secção específica e esconde as outras.
      * @param {string} sectionId - O ID da secção a mostrar.
      */
     function showSection(sectionId) {
-        document.querySelectorAll('#main-content section').forEach(section => {
+        document.querySelectorAll('#main-content > section').forEach(section => {
             section.style.display = 'none';
         });
-        const targetSection = document.getElementById(sectionId);
-        if (targetSection) {
-            targetSection.style.display = 'block';
-        }
+        document.getElementById(sectionId).style.display = 'block';
 
-        // Atualizar o título do main-content
-        if (sectionId === 'search-section') {
-            document.getElementById('loans-section').style.display = 'block'; // Mostrar ambas no desktop, se for caso
+        // Lógica para layout desktop/mobile
+        if (sectionId === 'search-section' && window.innerWidth >= 900) {
+            document.getElementById('loans-section').style.display = 'block';
             document.getElementById('loans-section').style.gridColumn = '1 / 2';
             document.getElementById('search-section').style.gridColumn = '2 / 3';
-        } else {
-            document.getElementById('search-section').style.display = 'block';
-             // Simular a visualização de apenas uma grande secção no mobile
-             if (window.innerWidth < 900) {
-                document.getElementById('search-section').style.display = 'none';
-             }
         }
     }
 
@@ -73,29 +69,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Listeners de Eventos ---
 
-    // 1. Tratamento do Login
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        // Simulação: Apenas verifica se os campos não estão vazios
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
+    // 1. Tratamento do Login (se incluído na página; senão, use rotas)
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            if (email && password) {
+                alert(`A iniciar sessão com ${email}...`);
+                isLoggedIn = true;
+                updateViewState();
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        });
+    }
 
-        if (email && password) {
-            alert(`A iniciar sessão com ${email}...`);
-            isLoggedIn = true;
-            updateViewState();
-        } else {
-            alert('Por favor, preencha todos os campos.');
-        }
-    });
-
-    // 2. Tratamento do Registo
-    registerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Registo efetuado com sucesso! Por favor, inicie sessão.');
-        // O registo bem-sucedido pode reencaminhar para o login
-        registerForm.reset();
-    });
+    // 2. Tratamento do Registo (similar)
+    if (registerForm) {
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Registo efetuado com sucesso! Por favor, inicie sessão.');
+            registerForm.reset();
+        });
+    }
 
     // 3. Tratamento do Logout
     logoutBtn.addEventListener('click', () => {
@@ -107,24 +104,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Tratamento da Navegação
     navButtons.forEach(button => {
         button.addEventListener('click', () => {
-            if (button.textContent.includes('Dashboard') || button.textContent.includes('Empréstimos')) {
+            const text = button.textContent;
+            if (text.includes('Dashboard') || text.includes('Empréstimos')) {
                 showSection('loans-section');
-            } else if (button.textContent.includes('Pesquisar Livros') || button.textContent.includes('Favoritos')) {
-                // Para simplificar, direcionamos estes para a secção de pesquisa/livros
+            } else if (text.includes('Pesquisar Livros')) {
                 showSection('search-section');
-            } else if (button.textContent.includes('Sair')) {
-                // O logout é tratado pelo listener do logoutBtn
+            } else if (text.includes('Favoritos')) {
+                showSection('favorites-section');
+            } else if (text.includes('Multas')) {
+                showSection('fines-section');
+            } else if (text.includes('Sair')) {
                 return;
             }
-            // Adicionar uma classe de ativo (opcional)
         });
     });
 
     // 5. Tratamento de Ações nos Cartões de Livro
     bookCards.forEach(card => {
         const title = card.querySelector('h3').textContent;
-        const favButton = card.querySelector('.fa-heart').parentElement;
-        const primaryButton = card.querySelector('.book-info .actions .btn.primary');
+        const favButton = card.querySelector('.favorite-btn');
+        const primaryButton = card.querySelector('.btn.primary');
 
         // Toggle Favorito
         favButton.addEventListener('click', () => {
@@ -133,46 +132,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? '<i class="fas fa-heart"></i> Remover dos Favoritos' 
                 : '<i class="fas fa-heart"></i> Adicionar aos Favoritos';
             alert(isFav ? `${title} adicionado aos Favoritos!` : `${title} removido dos Favoritos!`);
+            // Adicionar/remover da secção de favoritos (simulado)
         });
 
         // Requisição/Reserva
         primaryButton.addEventListener('click', () => {
             if (primaryButton.classList.contains('reserve-btn')) {
-                alert(`Reserva criada para ${title}. Entrará na fila de espera.`);
+                const queuePos = (reservationQueues[title] || 0) + 1;
+                reservationQueues[title] = queuePos;
+                alert(`Reserva criada para ${title}. Posição na fila: ${queuePos}.`);
+                primaryButton.innerHTML = `<i class="fas fa-clock"></i> Reservar (Posição na Fila: ${queuePos})`;
             } else {
                 alert(`Livro ${title} requisitado com sucesso!`);
-                // Simulação: reduzir o número de cópias disponíveis e atualizar a lista de empréstimos (requer manipulação mais complexa do DOM ou um backend)
+                // Simular atualização de disponibilidade
             }
         });
     });
 
-    // 6. Tratamento da Devolução de Livro (Exemplo simples)
-    document.querySelectorAll('.loan-item .actions .btn.secondary').forEach(devBtn => {
-        if (devBtn.textContent.includes('Devolver')) {
-            devBtn.addEventListener('click', (e) => {
-                const loanItem = e.target.closest('.loan-item');
-                const fineText = loanItem.querySelector('.fine-status').textContent;
+    // 6. Tratamento de Devolução e Renovação de Livro
+    document.querySelectorAll('.loan-item .actions .btn').forEach(btn => {
+        const loanItem = btn.closest('.loan-item');
+        const title = loanItem.querySelector('h3').textContent;
 
-                if (fineText.includes('€') && parseFloat(fineText.match(/(\d+\,?\d*)/)[0].replace(',', '.')) > 0) {
-                    alert('Livro devolvido. Multa pendente de 12,50 € adicionada à sua conta.');
+        if (btn.classList.contains('return-btn')) {
+            btn.addEventListener('click', () => {
+                const fineText = loanItem.querySelector('.fine-status').textContent;
+                const fineValue = parseFloat(fineText.match(/(\d+\,?\d*)/)?.[0].replace(',', '.') || 0);
+                if (fineValue > 0) {
+                    alert(`Livro devolvido. Multa de ${fineValue.toFixed(2)} € adicionada.`);
+                    totalFines += fineValue;
+                    updateFinesDisplay();
                 } else {
                     alert('Livro devolvido sem multas.');
                 }
-                loanItem.remove(); // Remove o item da lista
-                // Nota: O cálculo e atualização da multa total precisa ser feito aqui
+                loanItem.remove();
+            });
+        } else if (btn.classList.contains('renew-btn')) {
+            btn.addEventListener('click', () => {
+                const renewCount = renewals[title] || 0;
+                if (renewCount < 1 && !reservationQueues[title]) {
+                    renewals[title] = 1;
+                    alert(`Empréstimo de ${title} renovado com sucesso! Nova data: 15/01/2026.`);
+                    btn.remove(); // Remover botão após renovação única
+                } else if (reservationQueues[title]) {
+                    alert('Não pode renovar: Há reservas pendentes.');
+                } else {
+                    alert('Já renovou este empréstimo o máximo permitido (1 vez).');
+                }
             });
         }
     });
 
     // 7. Pagamento de Multas
-    const payFinesBtn = document.querySelector('.fines-section .btn.primary');
+    const payFinesBtn = document.querySelector('.pay-btn');
     if (payFinesBtn) {
         payFinesBtn.addEventListener('click', () => {
             if (totalFines > 0) {
-                alert(`A processar o pagamento de ${totalFines.toFixed(2)} €. Multas pagas com sucesso!`);
+                alert(`Pagamento de ${totalFines.toFixed(2)} € processado. Multas pagas!`);
                 totalFines = 0;
                 updateFinesDisplay();
-                document.querySelector('.loan-item.overdue .fine-status').textContent = 'Multa: 0,00 € (Paga)';
+                document.querySelectorAll('.fine-status').forEach(el => el.textContent = 'Multa: 0,00 € (Paga)');
             } else {
                 alert('Não tem multas pendentes.');
             }

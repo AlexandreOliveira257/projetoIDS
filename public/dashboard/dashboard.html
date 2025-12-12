@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Bibliotecário | Dashboard</title>
+    
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="main.css">
+    
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <!-- Cabeçalho Principal (Visível após login) -->
+    <header id="main-header" class="main-header">
+        <div class="logo">
+            <i class="fas fa-book-open"></i> Sistema Bibliotecário
+        </div>
+        <nav class="nav-buttons">
+            <button class="nav-btn"><i class="fas fa-home"></i> Dashboard</button>
+            <button class="nav-btn"><i class="fas fa-search"></i> Pesquisar Livros</button>
+            <button class="nav-btn"><i class="fas fa-heart"></i> Favoritos</button>
+            <button class="nav-btn"><i class="fas fa-bell"></i> Multas (0,00 €)</button>
+            <button class="nav-btn logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </nav>
+    </header>
+
+    <!-- Conteúdo Principal (Visível após login) -->
+    <main id="main-content" class="main-content">
+
+        <!-- Secção de Empréstimos (Dashboard Padrão) -->
+        <section id="loans-section" class="loans-section">
+            <h2>Os Meus Empréstimos</h2>
+            <div class="loan-list">
+                <!-- Exemplo de Item de Empréstimo -->
+                <div class="loan-item">
+                    <div class="book-info">
+                        <h3>O Grande Gatsby</h3>
+                        <p>Autor: F. Scott Fitzgerald</p>
+                        <p>Data de Devolução Prevista: 15/12/2025</p>
+                        <p class="fine-status">Multa: 0,00 €</p>
+                    </div>
+                    <div class="actions">
+                        <button class="btn primary renew-btn"><i class="fas fa-sync-alt"></i> Renovar (1x disponível)</button>
+                        <button class="btn secondary return-btn"><i class="fas fa-undo"></i> Devolver</button>
+                    </div>
+                </div>
+                <!-- Item Atrasado -->
+                <div class="loan-item overdue">
+                    <div class="book-info">
+                        <h3>1984</h3>
+                        <p>Autor: George Orwell</p>
+                        <p>Data de Devolução Prevista: 01/12/2025 (Atrasado)</p>
+                        <p class="fine-status">Multa: 12,50 €</p>
+                    </div>
+                    <div class="actions">
+                        <button class="btn secondary return-btn"><i class="fas fa-undo"></i> Devolver</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secção de Pesquisa de Livros -->
+        <section id="search-section" class="search-section">
+            <h2>Pesquisar Livros</h2>
+            <input type="text" placeholder="Pesquisar por título, autor ou ISBN..." class="search-input">
+            <div class="book-grid">
+                <!-- Exemplo de Cartão de Livro -->
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/150" alt="Capa do Livro">
+                    <div class="book-info">
+                        <h3>O Pequeno Príncipe</h3>
+                        <p>Autor: Antoine de Saint-Exupéry</p>
+                        <p>Disponível: 3/5 cópias</p>
+                        <div class="actions">
+                            <button class="btn primary request-btn"><i class="fas fa-book"></i> Requisitar</button>
+                            <button class="btn secondary favorite-btn"><i class="fas fa-heart"></i> Adicionar aos Favoritos</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Livro Sem Cópias Disponíveis -->
+                <div class="book-card">
+                    <img src="https://via.placeholder.com/150" alt="Capa do Livro">
+                    <div class="book-info">
+                        <h3>Harry Potter e a Pedra Filosofal</h3>
+                        <p>Autor: J.K. Rowling</p>
+                        <p>Disponível: 0/5 cópias (Fila de Reserva: 2 pessoas)</p>
+                        <div class="actions">
+                            <button class="btn primary reserve-btn"><i class="fas fa-clock"></i> Reservar (Posição na Fila: 3)</button>
+                            <button class="btn secondary favorite-btn"><i class="fas fa-heart"></i> Adicionar aos Favoritos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secção de Favoritos -->
+        <section id="favorites-section" class="favorites-section" style="display: none;">
+            <h2>Os Meus Favoritos</h2>
+            <div class="book-grid">
+                <!-- Cartões de livros favoritos seriam populados dinamicamente -->
+            </div>
+        </section>
+
+        <!-- Secção de Multas -->
+        <section id="fines-section" class="fines-section" style="display: none;">
+            <h2>Multas Pendentes</h2>
+            <p>Valor Total Pendente: 12,50 €</p>
+            <div class="fines-list">
+                <div class="fine-item">
+                    <p>Livro: 1984</p>
+                    <p>Motivo: Atraso de 5 dias</p>
+                    <p>Valor: 12,50 €</p>
+                </div>
+            </div>
+            <button class="btn primary pay-btn"><i class="fas fa-credit-card"></i> Pagar Multas</button>
+        </section>
+
+    </main>
+
+    <!-- Script Client-Side -->
+    <script src="scripts/script.js"></script>
+</body>
+</html>
