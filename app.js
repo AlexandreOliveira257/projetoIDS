@@ -8,7 +8,7 @@ APP.use(express.static(PATH.join(__dirname, 'public')));
 
 // Rota principal – agora não precisas de sendFile!
 APP.get('/', (req, res) => {
-    res.sendFile(PATH.join(__dirname, 'public', 'login.html'));
+    res.sendFile(PATH.join(__dirname, 'public', 'authentication/login.html'));
 });
 
 APP.use((req,res)=>
