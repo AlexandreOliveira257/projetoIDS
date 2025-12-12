@@ -1,6 +1,3 @@
-// scripts/script.js
-// (Atualizado com base no fornecido, adicionando funcionalidades novas como renovar, reservar, ver fila, pagar multas)
-
 document.addEventListener('DOMContentLoaded', () => {
     // --- Referências DOM ---
     const authSection = document.getElementById('auth-section');
