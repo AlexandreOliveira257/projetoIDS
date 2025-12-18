@@ -34,7 +34,7 @@
         
         <div class="register-link">
             <p>Ainda não tens conta?</p>
-            <a href="register.html">
+            <a id="registerClick">
                 <i class="fas fa-user-plus"></i> Criar nova conta
             </a>
         </div>
@@ -46,6 +46,9 @@
             e.preventDefault();
             alert('Login efetuado! (aqui farias o redirecionamento real)');
             window.location.href = '/dashboard';
+        });
+           document.getElementById('registerClick').addEventListener('click', function(e) {
+            window.location.href = '/register';
         });
     </script>
 </body>
