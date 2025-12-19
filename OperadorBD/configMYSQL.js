@@ -1,4 +1,4 @@
-import mysql from "mysql"
+const mysql = require("mysql2")
 
 const LIGACAO = mysql.createConnection(
     {
@@ -11,4 +11,4 @@ const LIGACAO = mysql.createConnection(
 )
 LIGACAO.connect()
 
-export default LIGACAO
+module.exports = LIGACAO

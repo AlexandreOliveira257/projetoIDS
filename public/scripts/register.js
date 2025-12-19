@@ -1,22 +1,22 @@
 document.getElementById('register-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        
+        const url = "http://localhost:5001/register" 
         const nome = document.getElementById('reg-nome').value;
         const email = document.getElementById('reg-email').value;
         const password = document.getElementById('reg-password').value;
         const confirm = document.getElementById('reg-confirm-password').value;
-        
+      
         if (password !== confirm) {
             alert('As palavras-passe não coincidem!');
             return;
         }
 
         try {
-            const response = await fetch('/api/register', {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    nome: nome, 
+                    nome: nome,
                     email: email, 
                     senha: password 
                 })

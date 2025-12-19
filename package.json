@@ -7,10 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
+  "type": "commonjs",
   "license": "ISC",
   "dependencies": {
     "express": "^5.2.1",
-    "mysql": "^2.18.1",
     "mysql2": "^3.16.0"
   }
 }
