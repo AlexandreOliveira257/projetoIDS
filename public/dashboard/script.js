@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} sectionId - O ID da secção a mostrar.
      */
     function showSection(sectionId) {
+        console.log('Mostrando secção:', sectionId); // Debug
+        
         // Esconder todas as secções
         document.querySelectorAll('#main-content > section').forEach(section => {
             section.style.display = 'none';
@@ -36,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetSection = document.getElementById(sectionId);
         if (targetSection) {
             targetSection.style.display = 'block';
+            console.log('Secção encontrada e mostrada:', sectionId); // Debug
+        } else {
+            console.error('Secção não encontrada:', sectionId); // Debug
         }
 
         // Remover classe active de todos os botões
@@ -45,11 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Adicionar classe active ao botão correspondente
         navButtons.forEach(btn => {
-            const text = btn.textContent;
-            if ((sectionId === 'loans-section' && text.includes('Dashboard')) ||
-                (sectionId === 'search-section' && text.includes('Pesquisar Livros')) ||
+            const text = btn.textContent.trim();
+            const shouldBeActive = 
+                (sectionId === 'loans-section' && (text.includes('Dashboard') || text.includes('Início'))) ||
+                (sectionId === 'search-section' && text.includes('Pesquisar')) ||
                 (sectionId === 'favorites-section' && text.includes('Favoritos')) ||
-                (sectionId === 'fines-section' && text.includes('Multas'))) {
+                (sectionId === 'fines-section' && text.includes('Multas'));
+            
+            if (shouldBeActive) {
                 btn.classList.add('active');
             }
         });
@@ -71,19 +79,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tratamento da Navegação
     navButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const text = button.textContent;
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const text = button.textContent.trim();
             
-            if (text.includes('Dashboard')) {
+            console.log('Botão clicado:', text); // Debug
+            
+            if (text.includes('Dashboard') || text.includes('Início')) {
                 showSection('loans-section');
-            } else if (text.includes('Pesquisar Livros')) {
+            } else if (text.includes('Pesquisar')) {
                 showSection('search-section');
             } else if (text.includes('Favoritos')) {
                 showSection('favorites-section');
             } else if (text.includes('Multas')) {
                 showSection('fines-section');
             } else if (text.includes('Sair')) {
-                window.location.href = '/';
+                if (confirm('Tem a certeza que deseja sair?')) {
+                    window.location.href = '/';
+                }
             }
         });
     });
