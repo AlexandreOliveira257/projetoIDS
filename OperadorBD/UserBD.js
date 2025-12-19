@@ -10,6 +10,13 @@ class UserBD {
             return true
         })
     }
+     VerificarUtilizador(email,senha) {
+        const QUERY = `SELECT NOME FROM pageflows.utilizadores WHERE email = ${email} and senha = ${senha}`
+        ligacao.query(QUERY,(err,result)=>{
+            if(err) throw err
+            return true
+        })
+    }
     /*
     async obterLivros()
     {

@@ -15,6 +15,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'authentication/login.html'));
 });
 
+app.post('/', async (req,res)=>{
+    const {email,senha} = req.body
+})
 // Rota para Dashboard (página inicial após login)
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'dashboard/dashboard.html')); 
