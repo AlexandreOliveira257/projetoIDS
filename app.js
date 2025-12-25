@@ -17,6 +17,21 @@ app.get('/', (req, res) => {
 
 app.post('/', async (req,res)=>{
     const {email,senha} = req.body
+    const bdo = new UserBD();
+    if (!email || !senha) {
+    return res.status(400).json({ message: "Falta informação!" });
+    }
+
+   const existe = await bdo.VerificarUtilizador(email, senha);
+
+    if (!existe) {
+      return res.status(401).json({ message: "Credenciais inválidas" });
+    } else {
+      return res.json({ message: "Login com sucesso!" });
+    }
+      
+
+      
 })
 // Rota para Dashboard (página inicial após login)
 app.get('/dashboard', (req, res) => {

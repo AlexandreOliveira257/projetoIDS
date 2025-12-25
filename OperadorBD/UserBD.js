@@ -10,13 +10,21 @@ class UserBD {
             return true
         })
     }
-     VerificarUtilizador(email,senha) {
-        const QUERY = `SELECT NOME FROM pageflows.utilizadores WHERE email = ${email} and senha = ${senha}`
-        ligacao.query(QUERY,(err,result)=>{
-            if(err) throw err
-            return true
-        })
-    }
+  VerificarUtilizador(email, senha) {
+  return new Promise((resolve, reject) => {
+    const QUERY = `SELECT nome FROM pageflows.utilizadores WHERE email = '${email}' AND senha = '${senha}' `;
+
+    ligacao.query(QUERY, (err, result) => {
+      if (err) return reject(err);
+      if (result.length > 0) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
     /*
     async obterLivros()
     {
