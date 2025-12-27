@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bookGrid = document.querySelector('.book-grid');
     const favoritesSection = document.getElementById('favorites-section');
     const finesSection = document.getElementById('fines-section');
+    const userNameElement = document.getElementById('user-name');
     
     let totalFinesElement = null;
     navButtons.forEach(btn => {
@@ -29,6 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 utilizadorLogado = await response.json();
                 console.log('Utilizador logado:', utilizadorLogado);
+                
+                // Atualizar o nome na interface
+                if (userNameElement && utilizadorLogado.nome) {
+                    userNameElement.textContent = utilizadorLogado.nome;
+                }
+                
                 await carregarFavoritosIds();
             } else {
                 window.location.href = '/';
