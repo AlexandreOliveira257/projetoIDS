@@ -1,89 +1,57 @@
-const ligacao = require("./configMYSQL.js")
+const ligacao = require("./configMYSQL.js");
+
 class UserBD {
-    constructor() {
+    constructor() {}
 
+    InserirUser(nome, email, senha) {
+        return new Promise((resolve, reject) => {
+            const QUERY = `INSERT INTO pageflows.utilizadores(nome,email,senha) VALUES(?,?,?)`;
+            ligacao.query(QUERY, [nome, email, senha], (err, result) => {
+                if (err) return reject(err);
+                resolve(true);
+            });
+        });
     }
-    InserirUser(nome,email,senha) {
-        const QUERY = `INSERT INTO pageflows.utilizadores(nome,email,senha) VALUES('${nome}','${email}','${senha}')`
-        ligacao.query(QUERY,(err,result)=>{
-            if(err) throw err
-            return true
-        })
-    }
-  VerificarUtilizador(email, senha) {
-  return new Promise((resolve, reject) => {
-    const QUERY = `SELECT nome FROM pageflows.utilizadores WHERE email = '${email}' AND senha = '${senha}' `;
 
-    ligacao.query(QUERY, (err, result) => {
-      if (err) return reject(err);
-      if (result.length > 0) {
-        resolve(true);
-      } else {
-        resolve(false);
-      }
-    });
-  });
+    VerificarUtilizador(email, senha) {
+        return new Promise((resolve, reject) => {
+            const QUERY = `
+                SELECT id_utilizador, nome, email 
+                FROM pageflows.utilizadores 
+                WHERE email = ? AND senha = ?
+            `;
+
+            ligacao.query(QUERY, [email, senha], (err, result) => {
+                if (err) {
+                    console.error('Erro na query:', err);
+                    return reject(err);
+                }
+                
+                console.log('Resultado da query:', result); // Debug
+                
+                if (result.length > 0) {
+                    resolve(result[0]); // Retorna os dados do utilizador
+                } else {
+                    resolve(null); // Nenhum utilizador encontrado
+                }
+            });
+        });
+    }
+
+    ObterUtilizadorPorId(id) {
+        return new Promise((resolve, reject) => {
+            const QUERY = `
+                SELECT id_utilizador, nome, email, multa_pendente
+                FROM pageflows.utilizadores 
+                WHERE id_utilizador = ?
+            `;
+
+            ligacao.query(QUERY, [id], (err, result) => {
+                if (err) return reject(err);
+                resolve(result[0] || null);
+            });
+        });
+    }
 }
 
-    /*
-    async obterLivros()
-    {
-        return new Promise((resolve, reject)=>
-        {
-            const QUERY = "SELECT idLivro,nome,autor FROM livros.coleccao"
-            ligacao.query(QUERY, (err,result)=>
-            {
-                if(err)
-                {
-                    reject(err)
-                }
-                let coleccao = []
-                result.forEach(resultado => {
-                    let novoLivro = new Livro(resultado.nome, resultado.autor, resultado.idLivro) 
-                    coleccao.push(novoLivro)                    
-                });
-                return resolve(coleccao)
-            })
-        })
-    }
-    apagarLivro(id)
-    {
-        return new Promise((resolve,reject)=>
-        {
-            const QUERY = "DELETE FROM livros.coleccao WHERE idLivro = " + id        
-            ligacao.query(QUERY,(err,result)=>
-            {
-                if(err)
-                {
-                    reject(err)
-                }
-                resolve(true)
-            })
-        })
-    }
-    updateLivro(livro)
-    {
-        return new Promise((resolve,reject)=>{
-            const QUERY = `UPDATE livros.coleccao SET nome ="${livro.nome}", autor = "${livro.autor}" 
-            WHERE idLivro = ${livro.idLivro}`
-            ligacao.query(QUERY, (err, result)=>
-            {
-                if(err)
-                {
-                    reject(err)
-                }
-                if(result.affectedRows > 0)
-                {
-                    resolve(true)    
-                }
-                else
-                {
-                    resolve(false)
-                }
-            })
-        })
-    }
-        */
-}
-
-module.exports = UserBD
+module.exports = UserBD;

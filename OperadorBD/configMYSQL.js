@@ -4,7 +4,7 @@ const LIGACAO = mysql.createConnection(
     {
         host:"localhost",
         user:"root", 
-        password: "",
+        password: "030900",
         database: "pageflows",
         port:3306
     }
