@@ -421,12 +421,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         favGrid.innerHTML = favoritos.map(livro => {
             const disponivel = livro.copias_disponiveis > 0;
-            const imagemUrl = livro.capa_url_capa || 'https://via.placeholder.com/150?text=Sem+Imagem';
+            const imagemUrl = livro.capa_url_capa || 'No-Image-Placeholder.png';
             const autores = livro.autores || 'Autor desconhecido';
             
             return `
                 <div class="book-card" data-livro-id="${livro.id_livro}">
-                    <img src="${imagemUrl}" alt="${livro.titulo}" onerror="this.src='https://via.placeholder.com/150?text=Sem+Imagem'">
+                    <img src="${imagemUrl}" alt="${livro.titulo}" onerror="this.onerror=null;this.src='No-Image-Placeholder.png'">
                     <div class="book-info">
                         <h3>${livro.titulo}</h3>
                         <p>Autor: ${autores}</p>
@@ -522,13 +522,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         bookGrid.innerHTML = livros.map(livro => {
             const disponivel = livro.copias_disponiveis > 0;
-            const imagemUrl = livro.capa_url_capa || 'https://via.placeholder.com/150?text=Sem+Imagem';
+            const imagemUrl = livro.capa_url_capa || 'public/No-Image-Placeholder.png';
             const autores = livro.autores || 'Autor desconhecido';
             const isFavorito = favoritosIds.has(livro.id_livro);
             
             return `
                 <div class="book-card" data-livro-id="${livro.id_livro}">
-                    <img src="${imagemUrl}" alt="${livro.titulo}" onerror="this.src='https://via.placeholder.com/150?text=Sem+Imagem'">
+                    <img src="${imagemUrl}" alt="${livro.titulo}" onerror="this.onerror=null;this.src='No-Image-Placeholder.png'">
                     <div class="book-info">
                         <h3>${livro.titulo}</h3>
                         <p>Autor: ${autores}</p>
